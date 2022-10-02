@@ -1,0 +1,64 @@
+// #Connect method
+// conn = sqlite3.connect('dndSkills-Attacks.db')
+
+// #Executes SQL commands.
+// c = conn.cursor()
+
+getAttackInfo(){
+    PUT which attack?
+    PUT attack options
+    
+    try :
+        GET attackName - 
+        READ attackName from database - 
+        READ modifier <- attack.modifier - 
+        READ damageDice <- attack.damageDice -
+        READ addedDamage <- attack.addedDamage - 
+
+    catch(err):
+        PUT not valid input
+
+    roll(attackName, modifier, damageDice, addedDamage, "attack")    
+
+
+
+}
+
+roll(name, mod, damageDice = 0, addedDamage = 0, choice){
+    //Which roll?
+    if choice -> attack:
+        toHit <- random(20) + mod
+        PUT toHit > AC?
+        GET higherThanAC
+        IF higherThanAC:
+            damageDice = random(damageDice)
+            damage = damageDice + addedDamage
+            PUT damage
+        ELSE IF !higherThanAC:
+            PUT missed hit
+    ELSE IF choice -> skill:
+        GET dc
+        abilityCheck <- random(20) + mod
+        IF abilityCheck >= dc:
+            PUT passed
+            IF abilityCheck == 20:
+                PUT crit / passed with flying colors
+        ELSE IF abilityCheck < dc:
+            PUT failed
+            IF abilityCheck - mod = 1:
+                PUT failed in worst way.
+}
+
+
+main() {
+    //Want a attack or skill roll?
+    choice <- input("Attack or Skill")
+
+    IF choice == attack:
+        rollAttack()
+
+    ELSE IF choice == skill:
+        rollSkill()
+    ELSE:
+        PUT invalid input
+}
